@@ -1,0 +1,47 @@
+﻿# Flutter/Dart
+.dart_tool/
+.pub/
+.pub-cache/
+build/
+*.lock
+*.log
+.flutter-plugins
+.flutter-plugins-dependencies
+.idea/
+.vscode/
+
+# Android
+*.iml
+.gradle/
+local.properties
+*.keystore
+*.jks
+key.properties
+captures/
+.externalNativeBuild
+android/.kotlin/
+
+# iOS
+Pods/
+Podfile.lock
+*.xcworkspace
+*.xcuserstate
+DerivedData/
+
+# Other
+.DS_Store
+*.swp
+*.swo
+*.zip
+*.tar.gz
+*.rar
+*.apk
+*.aab
+
+# Firebase
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Environment
+.env
+*.env.*
