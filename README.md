@@ -1,4 +1,4 @@
-# bitwise_ai_calorri_tracker
+# bitwise_ai_calorie_tracker
 
 A new Flutter project.
 
