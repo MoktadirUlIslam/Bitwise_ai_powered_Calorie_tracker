@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../utlits/app_colors.dart';
 import 'dart:async';
 import 'package:go_router/go_router.dart';
+import '../screens/auth_connections/provider/auth_provider.dart'; // Add this import
 
 class AnimatedSplashScreen extends StatefulWidget {
   const AnimatedSplashScreen({super.key});
@@ -13,7 +14,6 @@ class AnimatedSplashScreen extends StatefulWidget {
 class _AnimatedSplashScreenState extends State<AnimatedSplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
   late Animation<double> _bgFadeAnimation;
   late Animation<double> _logoScaleAnimation;
   late Animation<double> _orangeFadeAnimation;
@@ -23,6 +23,9 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen>
 
   // State for the typing text
   final ValueNotifier<bool> _startTyping = ValueNotifier<bool>(false);
+
+  // Auth Provider instance
+  final AuthProvider _authProvider = AuthProvider();
 
   @override
   void initState() {
@@ -64,13 +67,26 @@ class _AnimatedSplashScreenState extends State<AnimatedSplashScreen>
         // Trigger the typing animation after the logo is fully assembled
         _startTyping.value = true;
 
+        // Wait for typing animation to finish, then check auth
         Future.delayed(const Duration(milliseconds: 3000), () {
-          if (context.mounted) {
-            context.go('/Homescreen');
-          }
+          _checkAuthAndNavigate();
         });
       }
     });
+  }
+
+  Future<void> _checkAuthAndNavigate() async {
+    if (!mounted) return;
+
+    // Check if user is already logged in
+    final bool isAuthenticated = _authProvider.isUserLoggedIn;
+
+    // Navigate based on auth status
+    if (isAuthenticated) {
+      context.go('/Homescreen');
+    } else {
+      context.go('/signin');
+    }
   }
 
   @override

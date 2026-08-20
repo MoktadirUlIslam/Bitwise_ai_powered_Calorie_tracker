@@ -1,8 +1,17 @@
+import 'package:Bitwise/providers/firebase_options.dart';
 import 'package:Bitwise/utlits/app_colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'core/app_router.dart'; // <-- Import the NEW app_router.dart
+import 'core/app_router.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -22,8 +31,6 @@ class MyApp extends StatelessWidget {
           bodyLarge: TextStyle(color: Colors.white70),
         ),
       ),
-      // FIX: Use routerConfig with go_router.
-      // This removes all the generic type errors permanently.
       routerConfig: router,
     );
   }

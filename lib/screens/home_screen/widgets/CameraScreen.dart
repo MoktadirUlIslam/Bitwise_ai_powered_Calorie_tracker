@@ -1,8 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart'; // <-- ADD THIS IMPORT
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
-import 'package:permission_handler/permission_handler.dart'; // <-- ADD THIS
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 
 class CameraScreen extends StatefulWidget {
@@ -19,7 +20,6 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-    // Use WidgetsBinding to ensure the widget tree is mounted before initializing
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initCamera();
     });
@@ -27,15 +27,12 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _initCamera() async {
     try {
-      // Force request permission again just in case
       await Permission.camera.request();
 
-      // On Infinix/Transsion phones, we must try to get cameras multiple times
       List<CameraDescription> cameras = [];
       try {
         cameras = await availableCameras();
       } catch (e) {
-        // If it fails once, wait half a second and try again
         await Future.delayed(const Duration(milliseconds: 500));
         cameras = await availableCameras();
       }
@@ -46,7 +43,7 @@ class _CameraScreenState extends State<CameraScreen> {
       }
 
       final firstCamera = cameras.first;
-      _controller = CameraController(firstCamera, ResolutionPreset.medium); // Lower resolution for stability
+      _controller = CameraController(firstCamera, ResolutionPreset.medium);
       await _controller!.initialize();
 
       if (mounted) {
@@ -63,7 +60,6 @@ class _CameraScreenState extends State<CameraScreen> {
     if (_controller == null || !_controller!.value.isInitialized) return;
 
     try {
-      // Disable the UI temporarily so the user can't spam the button
       setState(() {
         _isCameraInitialized = false;
       });
@@ -72,12 +68,11 @@ class _CameraScreenState extends State<CameraScreen> {
       print("Picture saved to: ${image.path}");
 
       if (mounted) {
-        // Only pop AFTER the image is successfully saved
-        Navigator.pop(context);
+        // Navigate back to home using go_router
+        context.go('/');
       }
     } catch (e) {
       print("Error taking picture: $e");
-      // Re-enable UI if error happens
       if (mounted) setState(() => _isCameraInitialized = true);
     }
   }
@@ -96,6 +91,12 @@ class _CameraScreenState extends State<CameraScreen> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.go('/Homescreen'); // Navigate to home screen using go_router
+          },
+        ),
         title: const Text("Scan your food"),
         centerTitle: true,
         actions: [

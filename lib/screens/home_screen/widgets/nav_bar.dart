@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart'; // <-- IMPORT THIS
+import 'package:go_router/go_router.dart';
 import '../../../utlits/app_colors.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
-  const CustomBottomNavBar({super.key});
+  final int currentIndex;
+
+  const CustomBottomNavBar({
+    super.key,
+    this.currentIndex = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      // Outer container is completely transparent, only holds the spacing
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+      decoration: const BoxDecoration(color: Colors.transparent),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+        padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.95),
           borderRadius: BorderRadius.circular(32),
@@ -32,16 +39,32 @@ class CustomBottomNavBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // 1. Home
-            const NavIcon(icon: Icons.home_rounded, isActive: true),
+            GestureDetector(
+              onTap: () {
+                if (currentIndex != 0) context.go('/Homescreen');
+              },
+              child: NavIcon(
+                icon: Icons.home_rounded,
+                isActive: currentIndex == 0,
+              ),
+            ),
 
-            // 2. Camera FAB (Center) - CLICKABLE
+            // 2. BMI
+            GestureDetector(
+              onTap: () {
+                if (currentIndex != 1) context.go('/bmi');
+              },
+              child: NavIcon(
+                icon: Icons.monitor_heart_outlined,
+                isActive: currentIndex == 1,
+              ),
+            ),
+
+            // 3. Camera FAB
             Transform.translate(
               offset: const Offset(0, -28),
               child: GestureDetector(
-                onTap: () {
-                  // Use GoRouter instead of Navigator.push
-                  context.go('/camera');
-                },
+                onTap: () => context.go('/camera'),
                 child: Container(
                   width: 56,
                   height: 56,
@@ -65,8 +88,27 @@ class CustomBottomNavBar extends StatelessWidget {
               ),
             ),
 
-            // 3. Statistics
-            const NavIcon(icon: Icons.bar_chart_rounded, isActive: false),
+            // 4. Statistics
+            GestureDetector(
+              onTap: () {
+                if (currentIndex != 3) context.go('/statistics');
+              },
+              child: NavIcon(
+                icon: Icons.bar_chart_rounded,
+                isActive: currentIndex == 3,
+              ),
+            ),
+
+            // 5. Profile
+            GestureDetector(
+              onTap: () {
+                if (currentIndex != 4) context.go('/profile');
+              },
+              child: NavIcon(
+                icon: Icons.person_rounded,
+                isActive: currentIndex == 4,
+              ),
+            ),
           ],
         ),
       ),
@@ -78,7 +120,11 @@ class NavIcon extends StatelessWidget {
   final IconData icon;
   final bool isActive;
 
-  const NavIcon({super.key, required this.icon, this.isActive = false});
+  const NavIcon({
+    super.key,
+    required this.icon,
+    this.isActive = false,
+  });
 
   @override
   Widget build(BuildContext context) {

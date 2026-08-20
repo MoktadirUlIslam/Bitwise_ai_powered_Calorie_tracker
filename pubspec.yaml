@@ -20,6 +20,11 @@ dependencies:
   # ADDED FOR PERMISSIONS (This was missing!)
   permission_handler: ^11.3.1
 
+  #Firbase core
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.3.4
+  cloud_firestore: ^5.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

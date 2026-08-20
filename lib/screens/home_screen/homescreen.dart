@@ -27,13 +27,14 @@ class HomeScreen extends StatelessWidget {
                     RecentMealsHeader(),
                     SizedBox(height: 12),
                     MealHistoryList(),
-                    SizedBox(height: 40),
+                    SizedBox(height: 80),
                   ],
                 ),
               ),
             ),
-            // 2. Bottom Navigation Bar
-            CustomBottomNavBar(), // This now pulls from home_nav_bar.dart
+            // Added extra transparent spacing to prevent tightness
+            const SizedBox(height: 10),
+            const CustomBottomNavBar(),
           ],
         ),
       ),
